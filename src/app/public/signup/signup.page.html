@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="danger">
+      <ion-buttons slot="start">
+        <ion-back-button  defaultHref="home"></ion-back-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding> 
+  <div text-center>
+    <ion-icon name="nuclear" class="logo" color="light"></ion-icon>
+    <h1>HAZARD</h1>
+    <h6>Keep safe every second</h6>
+  </div>
+  <br>
+  <ion-grid style="width: 75%;">
+      <ion-row class="inputRow">
+          <ion-icon name="person" color="danger"></ion-icon>
+          <ion-input type="text" placeholder="Your name" [(ngModel)]="name"></ion-input>
+        </ion-row>
+    <ion-row class="inputRow">
+      <ion-icon name="mail" color="danger"></ion-icon>
+      <ion-input type="email" placeholder="Your email" [(ngModel)]="email"></ion-input>
+    </ion-row>
+    <ion-row class="inputRow">
+      <ion-icon name="key" color="danger"></ion-icon>
+      <ion-input type="password" placeholder="Your password" [(ngModel)]="password"></ion-input>
+    </ion-row>
+    <ion-button style="margin-top: 15px;" expand="block" shape="round" color="light" fill="outline" (click)="signup()">Sign Up</ion-button>
+  </ion-grid>
+  <ion-button size="small" expand="block" fill="clear" color="light">Have an account? Login!</ion-button>
+</ion-content>

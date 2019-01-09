@@ -1,0 +1,27 @@
+ion-content {
+    // --ion-background-color: #f53d3d;
+    // --ion-background-color: color($colors, danger);
+    --background: var(--ion-color-danger);
+}
+
+.logo {
+    font-size: 25vh;
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+
+h1, h6 {
+    color: white;
+}
+
+.inputRow {
+    background-color: white;
+    padding-left: 10px;
+    border-radius: 30px;
+    margin-top: 10px;
+
+    ion-icon {
+        margin-top: 13px;
+        margin-right: 5px;
+    }
+}
