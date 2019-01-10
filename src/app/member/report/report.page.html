@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Report Hazard</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button  defaultHref="member"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="takePicture()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-img *ngIf="image" [src]="image"></ion-img>
+  
+  <ion-item>
+    <ion-label position="stacked">Hazard Description</ion-label>
+    <ion-textarea wrap="soft" rows="4" placeholder="Deskripsi potensi bahaya..."></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+      <ion-label>Risk Level</ion-label>
+      <ion-select value="medium" okText="Okay" cancelText="Dismiss">
+        <ion-select-option value="low">Low</ion-select-option>
+        <ion-select-option value="medium">Medium</ion-select-option>
+        <ion-select-option value="high">High</ion-select-option>
+      </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Consequences</ion-label>
+    <ion-textarea wrap="soft" rows="3" placeholder="Kerugian akibat hazard..."></ion-textarea>
+  </ion-item>
+
+</ion-content>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
@@ -19,6 +18,10 @@ export class PublicHazardsPage implements OnInit {
     this.afAuth.auth.signOut().then(() => {
       this.router.navigate(['login'])
     })
+  }
+
+  goReport() {
+    this.router.navigate(['/member/report'])
   }
 
 }
