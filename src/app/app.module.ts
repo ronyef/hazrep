@@ -10,9 +10,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { AngularFireModule } from '@angular/fire'
+import { AngularFireStorageModule } from '@angular/fire/storage'
 import { CoreModule } from './core/core.module';
 
 import { Camera } from '@ionic-native/camera/ngx'
+import { Geolocation } from '@ionic-native/geolocation/ngx'
 
 import { environment } from '../environments/environment'
 
@@ -24,12 +26,14 @@ import { environment } from '../environments/environment'
     IonicModule.forRoot(), 
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
     CoreModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
+    Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

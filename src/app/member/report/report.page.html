@@ -18,12 +18,12 @@
   
   <ion-item>
     <ion-label position="stacked">Hazard Description</ion-label>
-    <ion-textarea wrap="soft" rows="4" placeholder="Deskripsi potensi bahaya..."></ion-textarea>
+    <ion-textarea wrap="soft" rows="4" [(ngModel)]="description" placeholder="Deskripsi potensi bahaya..."></ion-textarea>
   </ion-item>
 
   <ion-item>
       <ion-label>Risk Level</ion-label>
-      <ion-select value="medium" okText="Okay" cancelText="Dismiss">
+      <ion-select value="medium" okText="Okay" cancelText="Dismiss" (ionChange)="riskSelected($event)">
         <ion-select-option value="low">Low</ion-select-option>
         <ion-select-option value="medium">Medium</ion-select-option>
         <ion-select-option value="high">High</ion-select-option>
@@ -32,7 +32,11 @@
 
   <ion-item>
     <ion-label position="stacked">Consequences</ion-label>
-    <ion-textarea wrap="soft" rows="3" placeholder="Kerugian akibat hazard..."></ion-textarea>
+    <ion-textarea wrap="soft" rows="3" [(ngModel)]="risk" placeholder="Kerugian akibat hazard..."></ion-textarea>
   </ion-item>
+
+  <ion-button expand="block" color="success" (click)="onSubmit()">
+    Submit Report
+  </ion-button>
 
 </ion-content>
