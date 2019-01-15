@@ -6,11 +6,12 @@ import { Router } from '@angular/router'
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
-import { ToastController } from '@ionic/angular'
+import { ToastController, AlertController } from '@ionic/angular'
 
 import * as firebase from 'firebase'
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
+// import { url } from 'inspector';
 
 
 export interface Hazard {
@@ -55,7 +56,8 @@ export class ReportPage implements OnInit {
     private geolocation: Geolocation,
     private afAuth: AngularFireAuth,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -111,16 +113,26 @@ export class ReportPage implements OnInit {
 
       if (this.image) {
         await this.uploadImage(doc.id).then((snap) => {
-          console.log('Upload sukes', snap)
+          // console.log('Upload sukses', snap)
           this.presentToast('Image uploaded')
+
+          this.storage.ref('hazardImage' + doc.id).getDownloadURL().subscribe((url) => {
+            this.imageUrl = url
+
+            const hazardDoc = this.afs.doc(`hazards/${doc.id}`)
+            hazardDoc.set({ imageUrl: this.imageUrl }, {merge: true }).then((val) => {
+              // this.presentAlert('Update database sukses!')
+            }).catch((err) => {
+              this.presentAlert(err.message)
+            })
+          })
+
         }).catch(err => {
           console.log(err)
           this.presentToast(err.message)
         })
-      }
-
+      }  
       this.router.navigate(['member', 'tabs', 'private'])
-
     }).catch(err => this.presentToast(err.message))
   }
 
@@ -140,31 +152,38 @@ export class ReportPage implements OnInit {
   }
 
   uploadImage(name: string): AngularFireUploadTask {
-    const path = 'hazardImages' + name
+    const path = 'hazardImage' + name
 
-    return this.uploadTask = this.storage.upload(path, this.image)
+    return this.uploadTask = this.storage.ref(path).putString(this.image)
 
     this.uploadPercentage = this.uploadTask.percentageChanges()
 
-    this.snapshot = this.uploadTask.snapshotChanges().pipe(
-      tap(snap => {
-        if (snap.bytesTransferred === snap.totalBytes) {
-          console.log('Transfer complete')
-        }
-      }),
-      finalize(() => {
-        this.storage.ref(path).getDownloadURL().subscribe(url => {
-          this.imageUrl = url
-        })
-      })
-    )
-
+    // this.snapshot = this.uploadTask.snapshotChanges().pipe(
+    //   tap(snap => {
+    //     if (snap.bytesTransferred === snap.totalBytes) {
+    //       this.presentAlert('transfer completed')
+    //     }
+    //   }),
+    //   finalize(() => {
+    //     this.storage.ref(path).getDownloadURL().subscribe(url => {
+    //       this.imageUrl = url
+    //       this.presentAlert(url)
+    //     })
+    //   })
+    // )
 
   }
 
   riskSelected(event: any) {
     this.level = event.detail.value
     console.log(this.level)
+  }
+
+  async presentAlert(msg: string) {
+    const alert = await this.alertController.create({
+      message: msg
+    })
+    await alert.present()
   }
 
 }
