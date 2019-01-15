@@ -14,7 +14,7 @@ import { ReportService } from '../../core/report.service'
 })
 export class PrivateHazardsPage implements OnInit {
 
-  hazards: Observable<Hazard[]>
+  hazards: Hazard[]
 
   constructor(
     private afAuth: AngularFireAuth, 
@@ -23,8 +23,9 @@ export class PrivateHazardsPage implements OnInit {
   { }
 
   ngOnInit() {
-    this.reportSvc.getHazardsByUser().subscribe((hazard) => {
-      console.log(hazard)
+    this.reportSvc.getHazardsByUser().subscribe((hazards) => {
+      console.log(hazards)
+      this.hazards = hazards
     })
   }
 
