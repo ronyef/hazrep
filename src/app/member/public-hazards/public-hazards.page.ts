@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Hazard } from 'src/app/core/hazard';
+import { ReportService } from 'src/app/core/report.service';
 
 @Component({
   selector: 'app-public-hazards',
@@ -9,9 +11,18 @@ import { Router } from '@angular/router';
 })
 export class PublicHazardsPage implements OnInit {
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) { }
+  hazards: Hazard[]
+
+  constructor(
+    private afAuth: AngularFireAuth, 
+    private router: Router,
+    private reportSvc: ReportService
+  ) { }
 
   ngOnInit() {
+    this.reportSvc.getPublicHazards().subscribe((hazards) => {
+      this.hazards = hazards
+    })
   }
 
   onLogout() {

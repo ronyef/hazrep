@@ -30,11 +30,21 @@ export class PrivateHazardsPage implements OnInit {
   }
 
   onLogout() {
-    this.afAuth.auth.signOut()
+    this.afAuth.auth.signOut().then(() => {
+      this.router.navigate(['login'])
+    })
   }
 
   goReport() {
     this.router.navigate(['/member/report'])
+  }
+
+  doRefresh(event) {
+    this.reportSvc.getHazardsByUser().subscribe((hazards) => {
+      console.log(hazards)
+      this.hazards = hazards
+      event.target.complete()
+    })
   }
 
 }

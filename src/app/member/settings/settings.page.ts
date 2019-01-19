@@ -15,7 +15,9 @@ export class SettingsPage implements OnInit {
   }
 
   onLogout() {
-    this.afAuth.auth.signOut()
+    this.afAuth.auth.signOut().then(() => {
+      this.router.navigate(['login'])
+    })
   }
 
   goReport() {

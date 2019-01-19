@@ -12,11 +12,14 @@ import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire'
 import { AngularFireStorageModule } from '@angular/fire/storage'
 import { CoreModule } from './core/core.module';
+import { ComponentsModule } from './components/components.module'
 
 import { Camera } from '@ionic-native/camera/ngx'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
+import { AgmCoreModule } from '@agm/core'
 
 import { environment } from '../environments/environment'
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +30,10 @@ import { environment } from '../environments/environment'
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-    CoreModule
+    CoreModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAbMejVUUM7xt2a6V7vVRykRyzu3JDVyD4'
+    })
   ],
   providers: [
     StatusBar,

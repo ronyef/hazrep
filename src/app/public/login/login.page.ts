@@ -38,6 +38,9 @@ export class LoginPage implements OnInit {
       console.log(credential)
       await this.presentToast(`Welcome ${credential.user.displayName}!`)
 
+      this.email = ''
+      this.password = ''
+
       this.router.navigate(['member'])
 
     }).catch(err => {

@@ -6,7 +6,7 @@ import { Router } from '@angular/router'
 
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
-import { ToastController, AlertController } from '@ionic/angular'
+import { ToastController, AlertController, LoadingController } from '@ionic/angular'
 
 import * as firebase from 'firebase'
 import { Observable } from 'rxjs';
@@ -57,7 +57,8 @@ export class ReportPage implements OnInit {
     private afAuth: AngularFireAuth,
     private toastCtrl: ToastController,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -107,13 +108,18 @@ export class ReportPage implements OnInit {
       rectified: false
     }
 
+    this.presentLoading('Posting...')
+
     hazardsCollection.add(newHazard).then(async (doc) => {
       // console.log('Send hazard success', doc)
+      this.loadingController.dismiss()
       this.presentToast('Hazard report submitted.')
 
       if (this.image) {
+        this.presentLoading('uploading image...')
         await this.uploadImage(doc.id).then((snap) => {
           // console.log('Upload sukses', snap)
+          this.loadingController.dismiss()
           this.presentToast('Image uploaded')
 
           this.storage.ref('hazardImage' + doc.id).getDownloadURL().subscribe((url) => {
@@ -154,23 +160,9 @@ export class ReportPage implements OnInit {
   uploadImage(name: string): AngularFireUploadTask {
     const path = 'hazardImage' + name
 
-    return this.uploadTask = this.storage.ref(path).putString(this.image)
+    return this.uploadTask = this.storage.ref(path).putString(this.image.split(',')[1], "base64")
 
     this.uploadPercentage = this.uploadTask.percentageChanges()
-
-    // this.snapshot = this.uploadTask.snapshotChanges().pipe(
-    //   tap(snap => {
-    //     if (snap.bytesTransferred === snap.totalBytes) {
-    //       this.presentAlert('transfer completed')
-    //     }
-    //   }),
-    //   finalize(() => {
-    //     this.storage.ref(path).getDownloadURL().subscribe(url => {
-    //       this.imageUrl = url
-    //       this.presentAlert(url)
-    //     })
-    //   })
-    // )
 
   }
 
@@ -184,6 +176,13 @@ export class ReportPage implements OnInit {
       message: msg
     })
     await alert.present()
+  }
+
+  async presentLoading(message: string) {
+    const loading = await this.loadingController.create({
+      message: message
+    });
+    await loading.present();
   }
 
 }

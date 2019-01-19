@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Hazard Detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ hazard.userName }}</ion-card-title>
+      <ion-card-subtitle>{{ hazard.createdAt.toDate() | date :'dd-MMM-yy h:mm:ss a ' }}</ion-card-subtitle>  
+    </ion-card-header>
+    <ion-card-content>
+      <ion-img *ngIf="hazard.imageUrl" [src]="hazard.imageUrl"></ion-img>
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Hazard Description</h2>
+            <p>{{hazard.description}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label text-wrap>
+            <h2 color="primary">Risk Level</h2>
+            <p>{{hazard.level}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label text-wrap>
+            <h2>Risks</h2>
+            <p>{{hazard.risk}}</p>
+          </ion-label> 
+        </ion-item>
+      </ion-list>
+      <br>
+      <h2>Location</h2>
+      <agm-map [latitude]="hazard.location.latitude" [longitude]="hazard.location.longitude" [zoom]="zoom">
+        <agm-marker [latitude]="hazard.location.latitude" [longitude]="hazard.location.longitude"></agm-marker>
+      </agm-map>
+      <br>
+      <ion-button (click)="onPublish(hazard)" expand="block" color="success">
+        Publish
+      </ion-button>
+      <ion-button (click)="onDismiss()" expand="block">
+        Close
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -5,13 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PublicHazardsPage } from './public-hazards.page';
-import { ComponentsModule } from 'src/app/components/components.module';
+import { HazardPage } from './hazard.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PublicHazardsPage
+    component: HazardPage
   }
 ];
 
@@ -20,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    ComponentsModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [PublicHazardsPage]
+  declarations: [HazardPage]
 })
-export class PublicHazardsPageModule {}
+export class HazardPageModule {}
