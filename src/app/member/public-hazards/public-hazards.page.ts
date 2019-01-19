@@ -35,4 +35,12 @@ export class PublicHazardsPage implements OnInit {
     this.router.navigate(['/member/report'])
   }
 
+  doRefresh(event) {
+    this.reportSvc.getPublicHazards().subscribe((hazards) => {
+      console.log(hazards)
+      this.hazards = hazards
+      event.target.complete()
+    })
+  }
+
 }
