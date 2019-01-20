@@ -9,4 +9,5 @@ export interface Hazard {
     createdAt: firebase.firestore.FieldValue
     rectified: boolean
     public?: boolean
+    orgID?: string
   }

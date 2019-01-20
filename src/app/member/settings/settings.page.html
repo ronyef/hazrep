@@ -19,10 +19,13 @@
   <ion-grid fixed>
     <ion-row align-items-center>
       <ion-col>
-          <ion-img class="image" src="https://www.eyedocs.co.uk/components/com_community/assets/user-anon.png"></ion-img>
+          <ion-img class="image" *ngIf="currentUser?.photoURL; else elseTemplate" [src]="currentUser?.photoURL"></ion-img>
+          <ng-template #elseTemplate>
+            <ion-img src="https://www.eyedocs.co.uk/components/com_community/assets/user-anon.png"></ion-img>
+          </ng-template>
       </ion-col>
       <ion-col>
-        <ion-button (click)="onClick()" size="small" shape="round" fill="outline" color="dark">
+        <ion-button (click)="takePicture()" size="small" shape="round" fill="outline" color="dark">
           <ion-icon slot="icon-only" name="camera"></ion-icon>
         </ion-button>
       </ion-col>
@@ -39,22 +42,30 @@
     <ion-item-sliding>
       <ion-item>
         <ion-label>Display Name</ion-label>
-        <ion-label slot="end">Rony Achmad</ion-label>
+        <ion-label slot="end">{{currentUser?.displayName}}</ion-label>
       </ion-item>
       <ion-item-options side="end">
         <ion-item-option (click)="favorite(item)">Edit</ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
-    
     <ion-item>
-      <ion-label>User ID</ion-label>
-      <ion-label slot="end">Aserlkifleu623eu</ion-label>
+      <ion-label>Email</ion-label>
+      <ion-label slot="end">{{currentUser?.email}}</ion-label>
     </ion-item>
+    <ion-item-sliding>
+      <ion-item>
+        <ion-label>Phone Number</ion-label>
+        <ion-label slot="end">{{currentUser?.phoneNumber}}</ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="favorite(item)">Edit</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
     <ion-list>
       <ion-item-sliding>
         <ion-item>
           <ion-label>Organization</ion-label>
-          <ion-label slot="end">PT Mekatronik</ion-label>
+          <ion-label *ngIf="currentUser?.orgName" slot="end">{{currentUser.orgName}}</ion-label>
         </ion-item> 
         <ion-item-options side="end">
           <ion-item-option (click)="favorite(item)">Edit</ion-item-option>

@@ -9,21 +9,21 @@ import { Geolocation } from '@ionic-native/geolocation/ngx'
 import { ToastController, AlertController, LoadingController } from '@ionic/angular'
 
 import * as firebase from 'firebase'
-import { Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
-// import { url } from 'inspector';
+import { Observable, from } from 'rxjs';
+
+import { Hazard } from '../../core/hazard'
 
 
-export interface Hazard {
-  userID: string
-  userName: string
-  description: string
-  level: string
-  risk: string
-  location: firebase.firestore.GeoPoint
-  createdAt: firebase.firestore.FieldValue
-  rectified: boolean
-}
+// export interface Hazard {
+//   userID: string
+//   userName: string
+//   description: string
+//   level: string
+//   risk: string
+//   location: firebase.firestore.GeoPoint
+//   createdAt: firebase.firestore.FieldValue
+//   rectified: boolean
+// }
 
 @Component({
   selector: 'app-report',
@@ -105,7 +105,8 @@ export class ReportPage implements OnInit {
       risk: this.risk,
       location: new firebase.firestore.GeoPoint(this.lat, this.lng),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      rectified: false
+      rectified: false,
+      public: false
     }
 
     this.presentLoading('Posting...')
@@ -162,7 +163,7 @@ export class ReportPage implements OnInit {
 
     return this.uploadTask = this.storage.ref(path).putString(this.image.split(',')[1], "base64")
 
-    this.uploadPercentage = this.uploadTask.percentageChanges()
+    // this.uploadPercentage = this.uploadTask.percentageChanges()
 
   }
 

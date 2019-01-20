@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Hazard } from 'src/app/core/hazard';
 import { ReportService } from 'src/app/core/report.service';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-public-hazards',
@@ -14,7 +14,7 @@ export class PublicHazardsPage implements OnInit {
   hazards: Hazard[]
 
   constructor(
-    private afAuth: AngularFireAuth, 
+    private authService: AuthService, 
     private router: Router,
     private reportSvc: ReportService
   ) { }
@@ -26,9 +26,9 @@ export class PublicHazardsPage implements OnInit {
   }
 
   onLogout() {
-    this.afAuth.auth.signOut().then(() => {
+    this.authService.logOut().then(() => {
       this.router.navigate(['login'])
-    })
+    }).catch(err => console.log(err))
   }
 
   goReport() {

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs'
 
 import { Hazard } from '../report/report.page';
 import { ReportService } from '../../core/report.service'
+import { AuthService } from 'src/app/core/auth.service';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class PrivateHazardsPage implements OnInit {
   constructor(
     private afAuth: AngularFireAuth, 
     private router: Router,
-    private reportSvc: ReportService)
+    private reportSvc: ReportService,
+    private authSvc: AuthService)
   { }
 
   ngOnInit() {
@@ -30,8 +32,10 @@ export class PrivateHazardsPage implements OnInit {
   }
 
   onLogout() {
-    this.afAuth.auth.signOut().then(() => {
+    this.authSvc.logOut().then(() => {
       this.router.navigate(['login'])
+    }).catch((err) => {
+      console.log(err)
     })
   }
 
