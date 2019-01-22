@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs'
 
-import { Hazard } from '../report/report.page';
+import { Hazard } from '../../core/hazard';
 import { ReportService } from '../../core/report.service'
 import { AuthService } from 'src/app/core/auth.service';
 

@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { Camera } from '@ionic-native/camera/ngx';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { ToastController, LoadingController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { User } from 'src/app/core/user';
 
 @Component({
   selector: 'app-settings',
@@ -14,20 +18,35 @@ export class SettingsPage implements OnInit {
   currentUser: any
   image: string
   uploadTask: AngularFireUploadTask
+  imageUrl: string
+  user: User
+
+  usersCollection: AngularFirestoreCollection<any>
+  usersObservable: Observable<any[]>
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private camera: Camera,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private afs: AngularFirestore,
+    private toastController: ToastController,
+    public loadingController: LoadingController
   ) { }
 
   ngOnInit() {
     // this.currentUser = this.authService.getCurrentUser()
+    this.authService.getUserDoc().subscribe(user => {
+      this.user = user
+      console.log(user)
+    })
   }
 
   ionViewWillEnter() {
-    this.currentUser = this.authService.getCurrentUser()
+    this.authService.getUserDoc().subscribe(user => {
+      this.user = user
+      console.log(user)
+    })
   }
 
   onLogout() {
@@ -43,6 +62,7 @@ export class SettingsPage implements OnInit {
   }
 
   takePicture() {
+
     let options: CameraOptions = {
       quality: 100,
       sourceType: this.camera.PictureSourceType.CAMERA,
@@ -59,11 +79,23 @@ export class SettingsPage implements OnInit {
 
       this.image = "data:image/png;base64," + base64Image
 
-      this.uploadPicture(this.currentUser.uid).then(snapshot => {
+      this.uploadPicture(this.user.uid).then(snapshot => {
 
         console.log(snapshot)
+        this.presentToast('Photo was uploaded.')
 
-        //todo
+        this.storage.ref('users/userPhoto' + this.user.uid).getDownloadURL().subscribe((url) => {
+          this.imageUrl = url
+
+          const userDoc = this.afs.doc(`users/${this.user.uid}`)
+
+          userDoc.set({photoURL: this.imageUrl}, {merge: true}).then(() => {
+            this.presentToast('PhotoURL updated.')
+          }).catch(err => {
+            this.presentToast(err.message)
+          })
+
+        })
 
       })
 
@@ -76,6 +108,21 @@ export class SettingsPage implements OnInit {
 
     return this.uploadTask = this.storage.ref(path).putString(this.image.split(',')[1], "base64")
 
+  }
+
+  async presentToast(msg: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async presentLoading(msg: string) {
+    const loading = await this.loadingController.create({
+      message: msg
+    });
+    await loading.present();
   }
 
 }

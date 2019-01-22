@@ -123,7 +123,7 @@ export class ReportPage implements OnInit {
           this.loadingController.dismiss()
           this.presentToast('Image uploaded')
 
-          this.storage.ref('hazardImage' + doc.id).getDownloadURL().subscribe((url) => {
+          this.storage.ref('hazards/hazardImage' + doc.id).getDownloadURL().subscribe((url) => {
             this.imageUrl = url
 
             const hazardDoc = this.afs.doc(`hazards/${doc.id}`)
@@ -159,7 +159,7 @@ export class ReportPage implements OnInit {
   }
 
   uploadImage(name: string): AngularFireUploadTask {
-    const path = 'hazardImage' + name
+    const path = 'hazards/hazardImage' + name
 
     return this.uploadTask = this.storage.ref(path).putString(this.image.split(',')[1], "base64")
 

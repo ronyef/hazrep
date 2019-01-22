@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase'
 import { User } from './user';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  userDocument: AngularFirestoreDocument<User>
+  userObservable: Observable<User>
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -35,10 +39,14 @@ export class AuthService {
     return this.afAuth.auth.currentUser.updateProfile({displayName: name, photoURL: photoUrl})
   }
 
+  updatePhone(phone: any) {
+    return this.afAuth.auth.currentUser.updatePhoneNumber(phone)
+  }
+
   saveUserToDB() {
 
     const currentUser = this.afAuth.auth.currentUser
-    const usersCollection = this.afs.collection('users')
+    const usersCollection = this.afs.collection('users').doc(currentUser.uid)
 
     const newUser: User = {
       uid: currentUser.uid,
@@ -49,8 +57,16 @@ export class AuthService {
       emailVerified: false
     }
 
-    return usersCollection.add(newUser)
+    return usersCollection.set(newUser)
 
+  }
+
+  getUserDoc() {
+
+    this.userDocument = this.afs.doc('users/' + this.getCurrentUser().uid)
+
+    return this.userObservable = this.userDocument.valueChanges()
+    
   }
 
 }
