@@ -35,12 +35,35 @@ export class AuthService {
     return this.afAuth.auth.currentUser
   }
 
-  updateProfile(name: string, photoUrl: string): Promise<void> {
-    return this.afAuth.auth.currentUser.updateProfile({displayName: name, photoURL: photoUrl})
+  async updateDisplayName(name: string): Promise<void> {
+    return this.afAuth.auth.currentUser.updateProfile({displayName: name, photoURL: this.afAuth.auth.currentUser.photoURL}).then(() => {
+      const userDoc = this.afs.doc(`users/${this.afAuth.auth.currentUser.uid}`)
+
+      userDoc.set({ displayName: name }, { merge: true })
+    })
   }
 
-  updatePhone(phone: any) {
-    return this.afAuth.auth.currentUser.updatePhoneNumber(phone)
+  // updatePhone(phone: any) {
+  //   return this.afAuth.auth.currentUser.updatePhoneNumber(phone).then(() => {
+  //     const userDoc = this.afs.doc(`users/${this.afAuth.auth.currentUser.uid}`)
+
+  //     userDoc.set({ phoneNumber: phone }, { merge: true })
+  //   })
+  // }
+
+  changeOrg(id: string) {
+
+    //ambil list orgs
+    //periksa apakah org ada
+    //jika ada simpan id ke user profile
+    //jika tidak ada reject
+
+  }
+
+  saveDisplayNameToDB(name: string) {
+    const userDoc = this.afs.doc(`users/${this.afAuth.auth.currentUser.uid}`)
+
+    userDoc.set({ displayName: name }, { merge: true })
   }
 
   saveUserToDB() {
