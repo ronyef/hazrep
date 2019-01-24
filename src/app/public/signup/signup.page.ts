@@ -38,7 +38,7 @@ export class SignupPage implements OnInit {
     this.authService.signupWithEmail(this.email, this.password)
       .then(credential => { 
 
-        this.authService.updateProfile(this.name, '').then(() => {
+        this.authService.updateProfile(this.name).then(() => {
 
           console.log('DisplayName updated')
           

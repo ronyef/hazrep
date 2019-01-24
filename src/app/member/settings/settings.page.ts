@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, Organization } from 'src/app/core/auth.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -39,16 +39,15 @@ export class SettingsPage implements OnInit {
     // this.currentUser = this.authService.getCurrentUser()
     this.authService.getUserDoc().subscribe(user => {
       this.user = user
-      console.log(user)
     })
   }
 
-  ionViewWillEnter() {
-    this.authService.getUserDoc().subscribe(user => {
-      this.user = user
-      console.log(user)
-    })
-  }
+  // ionViewWillEnter() {
+  //   this.authService.getUserDoc().subscribe(user => {
+  //     this.user = user
+  //     console.log(user)
+  //   })
+  // }
 
   onLogout() {
 
@@ -183,9 +182,32 @@ export class SettingsPage implements OnInit {
         {
           text: 'Save',
           handler: (data) => {
-            // this.authService.updateDisplayName(data.userName).then(() => {
-            //   org.close()
-            // }).catch(err => console.log(err))
+            this.authService.getOrgs().subscribe((val) => {
+    
+              let selectedOrg = val.map((org) => { return org}).filter(org => org.id == data.orgID)
+
+              if (selectedOrg.length > 0) {
+                // const organization = selectedOrg[0]
+                const selectedOrganization = {
+                  orgID: selectedOrg[0].id,
+                  orgName: selectedOrg[0].name
+                }
+                console.log(selectedOrganization)
+                
+                this.authService.saveOrg(selectedOrganization).then(() => {
+                  this.presentToast('Organization has been set!')
+                  org.close()
+                }).catch(err => {
+                  this.presentToast(err.message)
+                })
+                
+              } else {
+                this.presentToast('No organization found!')
+                org.close()
+              }              
+              
+            })
+            
           }
         }
       ]
