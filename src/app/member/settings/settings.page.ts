@@ -227,14 +227,13 @@ export class SettingsPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
             org.close()
           }
         }, {
           text: 'Delete',
           handler: () => {
             this.authService.deleteOrg().then(() => {
-              console.log('Org deleted')
+              this.presentToast('You have been removed from organization.')
               org.close()
             }).catch(err => console.log(err.message))
             
