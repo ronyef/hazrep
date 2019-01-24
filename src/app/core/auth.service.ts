@@ -118,4 +118,10 @@ export class AuthService {
 
   }
 
+  deleteOrg() {
+    const userDoc = this.afs.doc(`users/${this.getCurrentUser().uid}`)
+
+    return userDoc.set({ orgID: null, orgName: null }, { merge: true })
+  }
+
 }

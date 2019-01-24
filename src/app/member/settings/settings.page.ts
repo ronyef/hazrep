@@ -20,6 +20,7 @@ export class SettingsPage implements OnInit {
   uploadTask: AngularFireUploadTask
   imageUrl: string
   user: User
+  privateMode: boolean
 
   usersCollection: AngularFirestoreCollection<any>
   usersObservable: Observable<any[]>
@@ -216,38 +217,45 @@ export class SettingsPage implements OnInit {
     await alert.present();
   }
 
-  // async changePhoneAlertPrompt(phone) {
-  //   const alert = await this.alertController.create({
-  //     header: 'Change Phone Number!',
-  //     inputs: [
-  //       {
-  //         name: 'phone',
-  //         type: 'text',
-  //         placeholder: 'Enter new phone!'
-  //       }
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel',
-  //         cssClass: 'secondary',
-  //         handler: (data) => {
-  //           console.log('canceled');
-  //           phone.close()
-  //         }
-  //       },
-  //       {
-  //         text: 'Save',
-  //         handler: (data) => {
-  //           this.authService.updatePhone(data.phone).then(() => {
-  //             phone.close()
-  //           }).catch(err => console.log(err))
-  //         }
-  //       }
-  //     ]
-  //   });
-  
-  //   await alert.present();
-  // }
+  async confirmDeleteOrg(org) {
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Sure to <strong>delete</strong> organization?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+            org.close()
+          }
+        }, {
+          text: 'Delete',
+          handler: () => {
+            this.authService.deleteOrg().then(() => {
+              console.log('Org deleted')
+              org.close()
+            }).catch(err => console.log(err.message))
+            
+          }
+        }
+      ]
+    });
+    await alert.present()
+  }
+
+  privateModeChanged() {
+    this.privateMode = !this.privateMode
+    if (!this.privateMode) {
+      console.log('Mode = false')
+    }
+    else if (this.privateMode && this.user.orgName) {
+      console.log('Mode = True')
+    } else {
+      console.log('Org is empty')
+    }
+  }
+
 
 }

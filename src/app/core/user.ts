@@ -5,4 +5,6 @@ export interface User {
     photoURL: string;
     phoneNumber: string
     emailVerified: boolean;
+    orgID?: string;
+    orgName?: string;
 }
