@@ -25,6 +25,14 @@ export class PrivateHazardsPage implements OnInit {
   { }
 
   ngOnInit() {
+    this.getHazards()
+  }
+
+  ionViewWillEnter() {
+    this.getHazards()
+  }
+
+  getHazards() {
     this.reportSvc.getHazardsByUser().subscribe((hazards) => {
       console.log(hazards)
       this.hazards = hazards

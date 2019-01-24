@@ -20,6 +20,14 @@ export class PublicHazardsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getPublicHazards()
+  }
+
+  ionViewWillEnter() {
+    this.getPublicHazards()
+  }
+
+  getPublicHazards() {
     this.reportSvc.getPublicHazards().subscribe((hazards) => {
       this.hazards = hazards
     })

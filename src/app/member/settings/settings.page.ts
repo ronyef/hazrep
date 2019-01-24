@@ -43,12 +43,12 @@ export class SettingsPage implements OnInit {
     })
   }
 
-  // ionViewWillEnter() {
-  //   this.authService.getUserDoc().subscribe(user => {
-  //     this.user = user
-  //     console.log(user)
-  //   })
-  // }
+  ionViewWillEnter() {
+    this.authService.getUserDoc().subscribe(user => {
+      this.user = user
+      console.log(user)
+    })
+  }
 
   onLogout() {
 
@@ -245,15 +245,17 @@ export class SettingsPage implements OnInit {
     await alert.present()
   }
 
-  privateModeChanged() {
-    this.privateMode = !this.privateMode
-    if (!this.privateMode) {
-      console.log('Mode = false')
-    }
-    else if (this.privateMode && this.user.orgName) {
-      console.log('Mode = True')
+  privateModeChanged(toggle) {
+
+    if (this.privateMode == true && this.user.orgID != null) {
+      this.presentToast("Private mode active.")
+      toggle.checked = true
+    } else if (this.privateMode == true && this.user.orgID == null) {
+      this.presentToast("You don't have an organization!")
+      toggle.checked = false
     } else {
-      console.log('Org is empty')
+      console.log('false')
+      toggle.checked = false
     }
   }
 

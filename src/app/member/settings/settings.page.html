@@ -89,7 +89,7 @@
     </ion-list-header>
     <ion-item>
       <ion-label>Private Mode</ion-label>
-      <ion-toggle slot="end" (ionChange)="privateModeChanged()"></ion-toggle>
+      <ion-toggle #toggle slot="end" (ionChange)="privateModeChanged(toggle)" [(ngModel)]="privateMode"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>
