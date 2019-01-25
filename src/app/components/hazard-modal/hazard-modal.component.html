@@ -33,8 +33,8 @@
       </ion-list>
       <br>
       <h2>Location</h2>
-      <agm-map [latitude]="hazard.location.latitude" [longitude]="hazard.location.longitude" [zoom]="zoom">
-        <agm-marker [latitude]="hazard.location.latitude" [longitude]="hazard.location.longitude"></agm-marker>
+      <agm-map [latitude]="hazard.position.geopoint.latitude" [longitude]="hazard.position.geopoint.longitude" [zoom]="zoom">
+        <agm-marker [latitude]="hazard.position.geopoint.latitude" [longitude]="hazard.position.geopoint.longitude"></agm-marker>
       </agm-map>
       <br>
       <ion-button (click)="onPublish(hazard)" expand="block" color="success">

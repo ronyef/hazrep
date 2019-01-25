@@ -12,6 +12,8 @@ import * as firebase from 'firebase'
 import { Observable, from } from 'rxjs';
 
 import { Hazard } from '../../core/hazard'
+import { GeoService } from 'src/app/core/geo.service';
+import { AuthService } from 'src/app/core/auth.service';
 
 
 // export interface Hazard {
@@ -39,6 +41,7 @@ export class ReportPage implements OnInit {
   image: string = null
   rectified: boolean = false
   level: string = 'medium'
+  orgID: string
 
   uploadTask: AngularFireUploadTask
   uploadPercentage: Observable<number>
@@ -58,7 +61,9 @@ export class ReportPage implements OnInit {
     private toastCtrl: ToastController,
     private router: Router,
     private alertController: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private geoService: GeoService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -66,6 +71,10 @@ export class ReportPage implements OnInit {
 
     this.userID = this.afAuth.auth.currentUser.uid
     this.userName = this.afAuth.auth.currentUser.displayName
+
+    this.authService.getUserDoc().subscribe(doc => {
+      this.orgID = doc.orgID
+    })
   }
 
   takePicture() {
@@ -103,10 +112,11 @@ export class ReportPage implements OnInit {
       description: this.description,
       level: this.level,
       risk: this.risk,
-      location: new firebase.firestore.GeoPoint(this.lat, this.lng),
+      // location: new firebase.firestore.GeoPoint(this.lat, this.lng),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       rectified: false,
-      public: false
+      public: false,
+      orgID: this.orgID
     }
 
     this.presentLoading('Posting...')
@@ -115,6 +125,11 @@ export class ReportPage implements OnInit {
       // console.log('Send hazard success', doc)
       this.loadingController.dismiss()
       this.presentToast('Hazard report submitted.')
+
+      //set geohash to position field
+      this.geoService.setPoint(doc.id, this.lat, this.lng).then(() => {
+        console.log('Geohash created')
+      }).catch(err => console.log(err.message))
 
       if (this.image) {
         this.presentLoading('uploading image...')

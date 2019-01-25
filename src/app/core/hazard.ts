@@ -5,9 +5,9 @@ export interface Hazard {
     description: string
     level: string
     risk: string
-    location: firebase.firestore.GeoPoint
+    // location: firebase.firestore.GeoPoint
     createdAt: firebase.firestore.FieldValue
     rectified: boolean
-    public?: boolean
+    public: boolean
     orgID?: string
   }
