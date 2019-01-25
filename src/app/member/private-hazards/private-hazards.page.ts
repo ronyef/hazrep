@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
 import { Hazard } from '../../core/hazard';
 import { ReportService } from '../../core/report.service'
 import { AuthService } from 'src/app/core/auth.service';
+import { User } from 'src/app/core/user';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { AuthService } from 'src/app/core/auth.service';
 export class PrivateHazardsPage implements OnInit {
 
   hazards: Hazard[]
+  user: any
 
   constructor(
     private afAuth: AngularFireAuth, 
@@ -25,7 +27,10 @@ export class PrivateHazardsPage implements OnInit {
   { }
 
   ngOnInit() {
-    this.getHazards()
+    this.authSvc.getUser().then(data => {
+      this.user = data
+      this.getHazards()
+    })
   }
 
   ionViewWillEnter() {
@@ -33,8 +38,8 @@ export class PrivateHazardsPage implements OnInit {
   }
 
   getHazards() {
-    this.reportSvc.getHazardsByUser().subscribe((hazards) => {
-      console.log(hazards)
+    this.reportSvc.getHazardsByUser(this.user).subscribe((hazards) => {
+      // console.log(hazards)
       this.hazards = hazards
     })
   }
@@ -52,7 +57,7 @@ export class PrivateHazardsPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.reportSvc.getHazardsByUser().subscribe((hazards) => {
+    this.reportSvc.getHazardsByUser(this.user).subscribe((hazards) => {
       console.log(hazards)
       this.hazards = hazards
       event.target.complete()

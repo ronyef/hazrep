@@ -7,23 +7,25 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument}
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { LoadingController } from '@ionic/angular'
+import { AuthService } from './auth.service';
+import { Storage } from '@ionic/storage'
 
 // import 'rxjs/add/operator/map'
-import * as moment from 'moment'
-import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
 
-  loading: any
+  privateMode: boolean
 
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private storage: AngularFireStorage,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private authService: AuthService,
+    private ionicStorage: Storage
   ) { }
 
   hazardsCollection: AngularFirestoreCollection<Hazard>
@@ -38,9 +40,18 @@ export class ReportService {
 
   }
 
-  getPublicHazards() {
+  getPublicHazards(user: any) {
+
+    this.ionicStorage.get('privateMode').then((val) => {
+      this.privateMode = val
+    })
+
+    if (this.privateMode == true) {
+      this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('public', '==', true).where('orgID', '==', user.orgID).orderBy('createdAt', 'desc'))
+    } else {
+      this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('public', '==', true).orderBy('createdAt', 'desc'))
+    }
     
-    this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('public', '==', true).orderBy('createdAt', 'desc'))
     this.hazardsObservable = this.hazardsCollection.snapshotChanges().pipe(map(arr => {
       return arr.map(snap => {
         const data = snap.payload.doc.data()
@@ -52,11 +63,18 @@ export class ReportService {
     return this.hazardsObservable
   }
 
-  getHazardsByUser(): Observable<Hazard[]> {
+  getHazardsByUser(user: any): Observable<Hazard[]> {
     
-    const user = this.afAuth.auth.currentUser.uid
+    this.ionicStorage.get('privateMode').then((val) => {
+      this.privateMode = val
+    })
 
-    this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('userID', '==', user).orderBy('createdAt', 'desc'))
+    if (this.privateMode == true) {
+      this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('userID', '==', user.uid).where('orgID', '==', user.orgID).orderBy('createdAt', 'desc'))
+    } else {
+      this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('userID', '==', user.uid).orderBy('createdAt', 'desc'))
+    }
+
     this.hazardsObservable = this.hazardsCollection.snapshotChanges().pipe(map(arr => {
       return arr.map(snap => {
         const data = snap.payload.doc.data()

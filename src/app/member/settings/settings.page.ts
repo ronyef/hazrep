@@ -7,6 +7,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { ToastController, LoadingController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/core/user';
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'app-settings',
@@ -33,21 +34,28 @@ export class SettingsPage implements OnInit {
     private afs: AngularFirestore,
     private toastController: ToastController,
     public loadingController: LoadingController,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private ionicStorage: Storage
   ) { }
 
   ngOnInit() {
-    // this.currentUser = this.authService.getCurrentUser()
+    
     this.authService.getUserDoc().subscribe(user => {
       this.user = user
     })
+
+    this.ionicStorage.get('privateMode').then((val) => {
+      this.privateMode = val
+    })
+
   }
 
   ionViewWillEnter() {
+
     this.authService.getUserDoc().subscribe(user => {
       this.user = user
-      console.log(user)
     })
+
   }
 
   onLogout() {
@@ -247,14 +255,29 @@ export class SettingsPage implements OnInit {
   privateModeChanged(toggle) {
 
     if (this.privateMode == true && this.user.orgID != null) {
+
       this.presentToast("Private mode active.")
       toggle.checked = true
+
+      this.ionicStorage.set('privateMode', true)
+      this.privateMode = true
+
     } else if (this.privateMode == true && this.user.orgID == null) {
+
       this.presentToast("You don't have an organization!")
       toggle.checked = false
+
+      this.ionicStorage.set('privateMode', false)
+      this.privateMode = false
+
     } else {
+
       console.log('false')
       toggle.checked = false
+
+      this.ionicStorage.set('privateMode', false)
+      this.privateMode = false
+
     }
   }
 

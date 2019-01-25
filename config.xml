@@ -87,4 +87,5 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate device position" />
     </plugin>
     <engine name="android" spec="7.1.4" />
+    <plugin name="cordova-sqlite-storage" spec="2.6.0" />
 </widget>

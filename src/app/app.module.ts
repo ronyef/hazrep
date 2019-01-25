@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { IonicStorageModule } from '@ionic/storage'
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -27,12 +28,13 @@ import { environment } from '../environments/environment'
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     CoreModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAbMejVUUM7xt2a6V7vVRykRyzu3JDVyD4'
+      apiKey: environment.googleMapApiKey
     })
   ],
   providers: [

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Hazard } from 'src/app/core/hazard';
 import { ReportService } from 'src/app/core/report.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { User } from 'src/app/core/user';
 
 @Component({
   selector: 'app-public-hazards',
@@ -12,6 +13,7 @@ import { AuthService } from 'src/app/core/auth.service';
 export class PublicHazardsPage implements OnInit {
 
   hazards: Hazard[]
+  user: any
 
   constructor(
     private authService: AuthService, 
@@ -20,15 +22,20 @@ export class PublicHazardsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getPublicHazards()
+
+    this.authService.getUser().then((user) => {
+      this.user = user
+      this.getPublicHazards(this.user)
+    })
+    
   }
 
   ionViewWillEnter() {
-    this.getPublicHazards()
+    this.getPublicHazards(this.user)
   }
 
-  getPublicHazards() {
-    this.reportSvc.getPublicHazards().subscribe((hazards) => {
+  getPublicHazards(user: any) {
+    this.reportSvc.getPublicHazards(user).subscribe((hazards) => {
       this.hazards = hazards
     })
   }
@@ -44,7 +51,7 @@ export class PublicHazardsPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.reportSvc.getPublicHazards().subscribe((hazards) => {
+    this.reportSvc.getPublicHazards(this.user).subscribe((hazards) => {
       console.log(hazards)
       this.hazards = hazards
       event.target.complete()

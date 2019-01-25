@@ -5,14 +5,12 @@ import { User } from './user';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators'
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export interface Organization {
   id: string
   name: string
   verified?: boolean
 }
-
 
 @Injectable({
   providedIn: 'root'
@@ -108,6 +106,21 @@ export class AuthService {
 
     return this.userObservable = this.userDocument.valueChanges()
     
+  }
+
+  getUser() {
+    
+    let promise = new Promise((resolve, reject) => {
+      this.userDocument = this.afs.doc('users/' + this.getCurrentUser().uid)
+
+      this.userDocument.valueChanges().subscribe((user) => {
+        resolve(user)
+      })
+
+    })
+
+    return promise
+
   }
 
   saveOrg(org: any) {
