@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Hazard } from 'src/app/core/hazard';
 import { ReportService } from 'src/app/core/report.service';
@@ -27,7 +27,8 @@ export class PublicHazardsPage implements OnInit {
     private authService: AuthService, 
     private router: Router,
     private reportSvc: ReportService,
-    private geoService: GeoService
+    private geoService: GeoService,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -35,12 +36,7 @@ export class PublicHazardsPage implements OnInit {
     this.authService.getUser().then((user) => {
       this.user = user
       // this.getPublicHazards(this.user)
-      this.subscription = this.geoService.getPublicHazards(this.user, 30).subscribe((hazards) => {
-        this.hazards = hazards
-        this.radius = 30
-        console.log(this.hazards)
-        this.router.navigate(['member'])
-      })
+      this.getPublicHazardsByRadius(30)
     })
     
   }
@@ -56,6 +52,10 @@ export class PublicHazardsPage implements OnInit {
       this.hazards = hazards
       this.radius = radius
       console.log(this.hazards)
+
+      this.zone.run(async () => {
+        this.router.navigate(['member','tabs','public'])
+      })
     })
   }
 

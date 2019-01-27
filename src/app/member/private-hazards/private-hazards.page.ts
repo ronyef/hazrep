@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs'
@@ -23,7 +23,8 @@ export class PrivateHazardsPage implements OnInit {
     private afAuth: AngularFireAuth, 
     private router: Router,
     private reportSvc: ReportService,
-    private authSvc: AuthService)
+    private authSvc: AuthService,
+    private zone: NgZone)
   { }
 
   ngOnInit() {
@@ -37,10 +38,17 @@ export class PrivateHazardsPage implements OnInit {
     this.getHazards()
   }
 
-  getHazards() {
+  async getHazards() {
+    
+    await this.reportSvc.getMode()
+
     this.reportSvc.getHazardsByUser(this.user).subscribe((hazards) => {
-      // console.log(hazards)
+      console.log(hazards)
       this.hazards = hazards
+
+      this.zone.run(async () => {
+        this.router.navigate(['member','tabs','private'])
+      })
     })
   }
 

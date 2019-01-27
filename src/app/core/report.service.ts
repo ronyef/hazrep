@@ -10,7 +10,6 @@ import { LoadingController } from '@ionic/angular'
 import { AuthService } from './auth.service';
 import { Storage } from '@ionic/storage'
 
-// import 'rxjs/add/operator/map'
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +25,10 @@ export class ReportService {
     public loadingController: LoadingController,
     private authService: AuthService,
     private ionicStorage: Storage
-  ) { }
+  ) {  }
 
   hazardsCollection: AngularFirestoreCollection<Hazard>
-  hazardsObservable: Observable<Hazard[]>
+  public hazardsObservable: Observable<Hazard[]>
 
   getHazards(): Observable<Hazard[]> {
         
@@ -63,12 +62,8 @@ export class ReportService {
     return this.hazardsObservable
   }
 
-  getHazardsByUser(user: any) {
+  getHazardsByUser(user: any): Observable<Hazard[]> {
     
-    this.ionicStorage.get('privateMode').then((val) => {
-      this.privateMode = val
-    })
-
     if (this.privateMode == true) {
       this.hazardsCollection = this.afs.collection('hazards', ref => ref.where('userID', '==', user.uid).where('orgID', '==', user.orgID).orderBy('createdAt', 'desc'))
     } else {
@@ -84,6 +79,15 @@ export class ReportService {
     }))
 
     return this.hazardsObservable
+
+  }
+
+  getMode() {
+
+    this.ionicStorage.get('privateMode').then((val) => {
+      this.privateMode = val
+      console.log(val)
+    })
 
   }
 
