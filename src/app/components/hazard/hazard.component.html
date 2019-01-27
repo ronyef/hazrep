@@ -20,12 +20,12 @@
         <small>{{ hazard.level | titlecase }}</small>
       </ion-button>
     </ion-col>
-    <!-- <ion-col>
+    <ion-col *ngIf="hazard.queryMetadata">
       <ion-button fill="clear" color="danger" expand="block" (click)="comment(post)">
-        <ion-icon slot="start" name="text"></ion-icon>
-        <small>2 cmts</small>
+        <ion-icon slot="start" name="navigate"></ion-icon>
+        <small>{{ hazard?.queryMetadata.distance.toFixed(2) }} Km</small>
       </ion-button>
-    </ion-col> -->
+    </ion-col>
     <ion-col>
       <ion-button fill="clear" color="danger" expand="block">
       <!-- <small>{{ ago(post.data().created.toDate()) }}</small> -->
@@ -33,11 +33,4 @@
       </ion-button>
     </ion-col>
   </ion-row>
-  <!-- <ion-card-header>
-    <ion-card-subtitle>{{ hazard.userName }}</ion-card-subtitle>
-    <ion-card-title>Private Hazard</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    {{ hazard.description }}
-  </ion-card-content> -->
 </ion-card>

@@ -63,7 +63,7 @@ export class ReportService {
     return this.hazardsObservable
   }
 
-  getHazardsByUser(user: any): Observable<Hazard[]> {
+  getHazardsByUser(user: any) {
     
     this.ionicStorage.get('privateMode').then((val) => {
       this.privateMode = val

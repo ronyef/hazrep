@@ -9,6 +9,32 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col>
+              <ion-button (click)="getPublicHazardsByRadius(2)" fill="solid" expand="full" color="danger">
+                Nearby
+              </ion-button>
+          </ion-col>
+          <ion-col>
+              <ion-button (click)="getPublicHazardsByRadius(10)" fill="solid" expand="full" color="danger">
+                Far
+              </ion-button>
+          </ion-col>
+          <ion-col>
+              <ion-button (click)="getPublicHazardsByRadius(30)" fill="solid" expand="full" color="danger">
+                Further
+              </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
+
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>

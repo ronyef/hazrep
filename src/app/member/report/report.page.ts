@@ -170,7 +170,7 @@ export class ReportPage implements OnInit {
     this.lat = lat
     this.lng = lng
 
-    console.log(new firebase.firestore.GeoPoint(lat, lng))
+    // console.log(new firebase.firestore.GeoPoint(lat, lng))
   }
 
   uploadImage(name: string): AngularFireUploadTask {
