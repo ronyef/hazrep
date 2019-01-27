@@ -17,6 +17,8 @@ export class HazardModalComponent implements OnInit {
   lng: number = 7.809007;
   zoom: number = 17;
 
+  isPublished: boolean
+
   constructor(
     private modalCtrl: ModalController, 
     private reportSvc: ReportService,
@@ -24,6 +26,7 @@ export class HazardModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    
   }
 
   onDismiss() {

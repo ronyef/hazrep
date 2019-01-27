@@ -38,18 +38,19 @@ export class PrivateHazardsPage implements OnInit {
     this.getHazards()
   }
 
-  async getHazards() {
+  getHazards() {
     
-    await this.reportSvc.getMode()
-
-    this.reportSvc.getHazardsByUser(this.user).subscribe((hazards) => {
-      console.log(hazards)
-      this.hazards = hazards
-
-      this.zone.run(async () => {
-        this.router.navigate(['member','tabs','private'])
+    this.reportSvc.getMode().then((val) => {
+      this.reportSvc.getHazardsByUser(this.user).subscribe((hazards) => {
+        console.log(hazards)
+        this.hazards = hazards
+  
+        this.zone.run(async () => {
+          this.router.navigate(['member','tabs','private'])
+        })
       })
-    })
+    }).catch(err => console.log(err))
+    
   }
 
   onLogout() {

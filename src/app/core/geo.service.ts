@@ -11,6 +11,7 @@ import * as geofirex from 'geofirex'
 import { Observable } from 'rxjs';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Hazard } from './hazard';
+import { Storage } from '@ionic/storage'
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,16 @@ export class GeoService {
 
   geo = geofirex.init(firebase)
   points: Observable<any[]>
+  nearbyHazards: Observable<any[]>
 
   lat: number
   lng: number
 
+  privateMode: boolean
+
   constructor(
-    private geoLocation: Geolocation
+    private geoLocation: Geolocation,
+    private ionicStorage: Storage
   ) { 
     this.getCurrentLocation()
   }
@@ -37,32 +42,68 @@ export class GeoService {
 
   }
 
-  getPublicHazards(user: any, radius: number): Observable<any> {
+  getMode() {
 
-    const publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true))
-    
-    this.getCurrentLocation()
+    let promise = new Promise((resolve, reject) => {
+      this.ionicStorage.get('privateMode').then((val) => {
+        this.privateMode = val
+        console.log(val)
+        resolve(val)
+      }).catch(error => {
+        console.log(error)
+        reject(error)
+      })
+    })
 
-    const center = this.geo.point(this.lat, this.lng)
-
-    let nearbyHazards: Observable<any> = publicHazards.within(center, radius, 'position')
-    
-    return nearbyHazards
+    return promise    
 
   }
 
-  async getCurrentLocation() {
+  getPublicHazards(user: any, radius: number) {
 
-    let lat: number
-    let lng: number
+    let promise = new Promise((resolve, reject) => {
 
-    await this.geoLocation.getCurrentPosition().then((resp) => {
-      lat = resp.coords.latitude
-      lng = resp.coords.longitude
+      this.getMode().then((val) => {
+
+        let publicHazards: any
+  
+        if(val == true) {
+          publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true).where('orgID', '==', user.orgID))
+        } else {
+          publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true))
+        }
+  
+        this.getCurrentLocation().then((resp) => {
+  
+          const center = this.geo.point(resp.coords.latitude, resp.coords.longitude)
+  
+          this.nearbyHazards = publicHazards.within(center, radius, 'position')
+
+          resolve(this.nearbyHazards)
+
+        })
+         
+      }).catch(err => reject(err))
+
     })
 
-    this.lat = lat
-    this.lng = lng
+    return promise
+
+  }
+
+  getCurrentLocation() {
+
+    let promise = new Promise((resolve, reject) => {
+      this.geoLocation.getCurrentPosition().then((resp) => {
+        this.lat = resp.coords.latitude
+        this.lng = resp.coords.longitude
+        resolve(resp)
+      }).catch(err => {
+        reject(err)
+      })
+    })
+
+    return promise
 
   }
 

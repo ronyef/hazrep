@@ -84,10 +84,17 @@ export class ReportService {
 
   getMode() {
 
-    this.ionicStorage.get('privateMode').then((val) => {
-      this.privateMode = val
-      console.log(val)
+    let promise = new Promise((resolve, reject) => {
+      this.ionicStorage.get('privateMode').then((val) => {
+        this.privateMode = val
+        console.log(val)
+        resolve()
+      }).catch(err => {
+        reject()
+      })
     })
+    
+    return promise
 
   }
 

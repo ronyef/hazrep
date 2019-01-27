@@ -37,7 +37,7 @@
         <agm-marker [latitude]="hazard.position.geopoint.latitude" [longitude]="hazard.position.geopoint.longitude"></agm-marker>
       </agm-map>
       <br>
-      <ion-button (click)="onPublish(hazard)" expand="block" color="success">
+      <ion-button *ngIf="hazard.public == false" (click)="onPublish(hazard)" expand="block" color="success">
         Publish
       </ion-button>
       <ion-button (click)="onDismiss()" expand="block">

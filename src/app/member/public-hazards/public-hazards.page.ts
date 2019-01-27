@@ -42,21 +42,27 @@ export class PublicHazardsPage implements OnInit {
   }
 
   getPublicHazards(user: any) {
+
     this.reportSvc.getPublicHazards(user).subscribe((hazards) => {
       this.hazards = hazards
     })
+    
   }
 
   getPublicHazardsByRadius(radius: number){
-    this.subscription = this.geoService.getPublicHazards(this.user, radius).subscribe((hazards) => {
-      this.hazards = hazards
-      this.radius = radius
-      console.log(this.hazards)
 
-      this.zone.run(async () => {
-        this.router.navigate(['member','tabs','public'])
+    this.geoService.getPublicHazards(this.user, radius).then((resp) => {
+      this.geoService.nearbyHazards.subscribe((hazards) => {
+        this.hazards = hazards
+        this.radius = radius
+
+        this.zone.run(async () => {
+          this.router.navigate(['member','tabs','public'])
+        })
+
       })
     })
+
   }
 
   onLogout() {
