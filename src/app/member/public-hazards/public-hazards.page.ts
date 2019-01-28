@@ -76,10 +76,11 @@ export class PublicHazardsPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.geoService.getPublicHazards(this.user, this.radius).subscribe((hazards) => {
-      console.log(hazards)
-      this.hazards = hazards
-      event.target.complete()
+    this.geoService.getPublicHazards(this.user, this.radius).then((resp) => {
+      this.geoService.nearbyHazards.subscribe((hazards) => {
+        this.hazards = hazards
+        event.target.complete()
+      })
     })
   }
 

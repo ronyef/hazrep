@@ -4,10 +4,11 @@ import { AuthService, Organization } from 'src/app/core/auth.service';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { ToastController, LoadingController, AlertController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/core/user';
 import { Storage } from '@ionic/storage'
+import { HelpComponent } from '../../components/help/help.component'
 
 @Component({
   selector: 'app-settings',
@@ -35,7 +36,8 @@ export class SettingsPage implements OnInit {
     private toastController: ToastController,
     public loadingController: LoadingController,
     public alertController: AlertController,
-    private ionicStorage: Storage
+    private ionicStorage: Storage,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -66,8 +68,11 @@ export class SettingsPage implements OnInit {
 
   }
 
-  goReport() {
-    this.router.navigate(['/member/report'])
+  async showHelp() {
+    const modal = await this.modalController.create({
+      component: HelpComponent
+    })
+    modal.present()
   }
 
   takePicture() {

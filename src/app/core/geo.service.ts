@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment'
 //Init GeoFireX
 import * as geofirex from 'geofirex'
 import { Observable } from 'rxjs';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { Hazard } from './hazard';
 import { Storage } from '@ionic/storage'
 
@@ -70,10 +70,10 @@ export class GeoService {
         if(val == true) {
           publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true).where('orgID', '==', user.orgID))
         } else {
-          publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true))
+          publicHazards = this.geo.collection('hazards', ref => ref.where('public', '==', true).where('orgID', '==', null))
         }
   
-        this.getCurrentLocation().then((resp) => {
+        this.getCurrentLocation().then((resp: Geoposition) => {
   
           const center = this.geo.point(resp.coords.latitude, resp.coords.longitude)
   

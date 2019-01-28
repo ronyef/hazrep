@@ -10,19 +10,19 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button color="primary" (click)="goReport()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
   <ion-grid fixed>
     <ion-row align-items-center>
       <ion-col>
         <!-- <ion-avatar> -->
-            <ion-img class="circle-image" *ngIf="user?.photoURL; else elseTemplate" [src]="user.photoURL"></ion-img>
+            <ion-img class="circle-pic" *ngIf="user?.photoURL; else elseTemplate" [src]="user.photoURL"></ion-img>
             <ng-template #elseTemplate>
-              <ion-img src="https://www.eyedocs.co.uk/components/com_community/assets/user-anon.png"></ion-img>
+              <ion-img class="circle-pic" src="assets/anon.png"></ion-img>
             </ng-template>
         <!-- </ion-avatar> -->
           
@@ -90,6 +90,23 @@
     <ion-item>
       <ion-label>Private Mode</ion-label>
       <ion-toggle #toggle slot="end" (ionChange)="privateModeChanged(toggle)" [(ngModel)]="privateMode"></ion-toggle>
+    </ion-item>
+  </ion-list>
+  <br>
+  <ion-list>
+    <!-- <ion-list-header>
+      <ion-label>
+        <ion-text color="primary">
+          <h2>Support</h2>
+        </ion-text>
+      </ion-label>
+    </ion-list-header> -->
+    <ion-item>
+      <ion-label>Support</ion-label>
+      <ion-button (click)="showHelp()" color="dark">
+        <ion-icon slot="start" name="help" slot="start"></ion-icon>
+        Help & About
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
