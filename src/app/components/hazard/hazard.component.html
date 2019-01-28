@@ -15,7 +15,7 @@
   <ion-img *ngIf="hazard.imageUrl" [src]="hazard.imageUrl"></ion-img>
   <ion-row class="bottom">
     <ion-col>
-      <ion-button fill="clear" color="danger" expand="block" (click)="like(post)">
+      <ion-button fill="clear" color="danger" expand="block">
         <ion-icon slot="start" name="warning"></ion-icon>
         <small>{{ hazard.level | titlecase }}</small>
       </ion-button>
@@ -29,7 +29,7 @@
     <ion-col>
       <ion-button fill="clear" color="danger" expand="block">
       <!-- <small>{{ ago(post.data().created.toDate()) }}</small> -->
-      <small>{{ ago(hazard.createdAt.toDate()) }}</small>
+      <small>{{ ago(hazard?.createdAt.toDate()) }}</small>
       </ion-button>
     </ion-col>
   </ion-row>

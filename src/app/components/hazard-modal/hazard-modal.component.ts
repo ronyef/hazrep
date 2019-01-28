@@ -10,7 +10,7 @@ import { ReportService } from 'src/app/core/report.service';
 })
 export class HazardModalComponent implements OnInit {
 
-  @Input() hazard: Hazard
+  @Input() hazard: any
 
   title: string = 'My first AGM project';
   lat: number = 51.678418;

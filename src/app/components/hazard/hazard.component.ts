@@ -14,7 +14,7 @@ import { HazardModalComponent } from '../hazard-modal/hazard-modal.component'
 export class HazardComponent implements OnInit {
 
   @Input()
-  hazard: Hazard
+  hazard: any
 
   constructor(private modalCtrl: ModalController) { }
 
