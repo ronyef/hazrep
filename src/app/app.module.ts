@@ -19,7 +19,8 @@ import { Camera } from '@ionic-native/camera/ngx'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
 import { AgmCoreModule } from '@agm/core'
 
-import { environment } from '../environments/environment'
+// import { environment } from '../environments/environment'
+import { environment } from '../environments/environment.prod'
 
 
 @NgModule({

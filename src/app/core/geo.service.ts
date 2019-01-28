@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app'
 
 //init firebase
-import { environment } from '../../environments/environment'
+// import { environment } from '../../environments/environment'
 // firebase.initializeApp(environment.firebase)
+import { environment } from '../../environments/environment.prod'
 
 //Init GeoFireX
 import * as geofirex from 'geofirex'
