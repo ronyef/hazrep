@@ -33,4 +33,7 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-#/src/environments/**
+/src/environments/**
+
+hazardReport.apk
+my-release-key.keystore
