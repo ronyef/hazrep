@@ -16,16 +16,6 @@ import { GeoService } from 'src/app/core/geo.service';
 import { AuthService } from 'src/app/core/auth.service';
 
 
-// export interface Hazard {
-//   userID: string
-//   userName: string
-//   description: string
-//   level: string
-//   risk: string
-//   location: firebase.firestore.GeoPoint
-//   createdAt: firebase.firestore.FieldValue
-//   rectified: boolean
-// }
 
 @Component({
   selector: 'app-report',
@@ -41,7 +31,7 @@ export class ReportPage implements OnInit {
   image: string = null
   rectified: boolean = false
   level: string = 'medium'
-  orgID: string
+  orgID: string = null
 
   uploadTask: AngularFireUploadTask
   uploadPercentage: Observable<number>

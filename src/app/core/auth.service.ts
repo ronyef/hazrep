@@ -93,7 +93,8 @@ export class AuthService {
       email: currentUser.email,
       photoURL: '',
       phoneNumber: '',
-      emailVerified: false
+      emailVerified: false,
+      orgID: null
     }
 
     return usersCollection.set(newUser)
